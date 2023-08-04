@@ -1,78 +1,24 @@
-import axios from "axios";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { Button, FormGroup, Input, Row, Col} from "reactstrap";
+import React, { useState } from 'react'
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 
-const initialUser ={email:"", password: "", username: ""}
-const Registration = () => {
-    const [user, setUser] = useState(initialUser);
-    const navigate = useNavigate();
-
-    const signUp = async () => {
-        try {
-            const url = `http://localhost:1337/api/auth/local/register`;
-            if (user.username && user.email && user.password) {
-                const res = await axios.post(url,user);
-                if (res){
-                    setUser(initialUser);
-                    navigate("/login");
-                }
-            }
-        } catch (error) {
-            toast.error(error.message, {
-                hideProgressBar: true,
-            });
-        }
-    };
-
-    const handleUserChange = ({target}) => {
-        const {name, value} =  target;
-        setUser((currentUser) => ({
-        ...currentUser,
-        [name]: value,        
-        }));
-    };
-
+const CustomNav = () => {
+    const [isOpen, setIsOpen] = useState(false) 
+    const toggle = () => setIsOpen(!isOpen)
     return (
-    <Row className="register">
-        <Col sm ='12' md={{size: 4, offset: 4}}>
-        <   div>
-            <h2>Sign up:</h2>
-            <FormGroup>
-            <Input 
-                    type="text" 
-                    name="username" 
-                    value={user.username} 
-                    onChange={handleUserChange} 
-                    placeholder="Enter your full name"
-            />
-        </FormGroup>
-        <FormGroup>
-            <Input 
-                    type="email" 
-                    name="email" 
-                    value={user.email} 
-                    onChange={handleUserChange} 
-                    placeholder="Enter your email"
-            />
-        </FormGroup>
-        <FormGroup>
-            <Input 
-                    type="password" 
-                    name="password" 
-                    value={user.password} 
-                    onChange={handleUserChange} 
-                    placeholder="Enter password"
-            />
-        </FormGroup>
-        <Button color="primary" onClick={signUp}>
-            Sign up
-            </Button>
-             </div>
-        </Col>
-    </Row>
-    ); 
+        <div className="custom-nav">
+        <Navbar color="light" light expand = "md">
+          <NavbarBrand href="/" className="mr-auto">Strapi App</NavbarBrand>
+          <NavbarToggler onClick={toggle} className="mr-2" />
+          <Collapse isOpen={isOpen} navbar>
+            <Nav navbar>
+              <NavItem>
+                <NavLink href="/logout">Logout</NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </Navbar>
+      </div>
+    );
 };
 
-export default Registration;
+export default CustomNav;
